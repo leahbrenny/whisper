@@ -96,7 +96,7 @@ class WriteTXT(ResultWriter):
             print(segment["text"].strip(), file=file, flush=True)
 
 
-class SubtitlesWriter(ResultWriter):
+# class SubtitlesWriter(ResultWriter):
     always_include_hours: bool
     decimal_marker: str
 
@@ -196,39 +196,39 @@ class WriteVTT(SubtitlesWriter):
             print(f"{start} --> {end}\n{text}\n", file=file, flush=True)
 
 
-class WriteSRT(SubtitlesWriter):
-    extension: str = "srt"
-    always_include_hours: bool = True
-    decimal_marker: str = ","
+# class WriteSRT(SubtitlesWriter):
+#     extension: str = "srt"
+#     always_include_hours: bool = True
+#     decimal_marker: str = ","
 
-    def write_result(self, result: dict, file: TextIO, options: dict):
-        for i, (start, end, text) in enumerate(
-            self.iterate_result(result, options), start=1
-        ):
-            print(f"{i}\n{start} --> {end}\n{text}\n", file=file, flush=True)
-
-
-class WriteTSV(ResultWriter):
-    """
-    Write a transcript to a file in TSV (tab-separated values) format containing lines like:
-    <start time in integer milliseconds>\t<end time in integer milliseconds>\t<transcript text>
-
-    Using integer milliseconds as start and end times means there's no chance of interference from
-    an environment setting a language encoding that causes the decimal in a floating point number
-    to appear as a comma; also is faster and more efficient to parse & store, e.g., in C++.
-    """
-
-    extension: str = "tsv"
-
-    def write_result(self, result: dict, file: TextIO, options: dict):
-        print("start", "end", "text", sep="\t", file=file)
-        for segment in result["segments"]:
-            print(round(1000 * segment["start"]), file=file, end="\t")
-            print(round(1000 * segment["end"]), file=file, end="\t")
-            print(segment["text"].strip().replace("\t", " "), file=file, flush=True)
+#     def write_result(self, result: dict, file: TextIO, options: dict):
+#         for i, (start, end, text) in enumerate(
+#             self.iterate_result(result, options), start=1
+#         ):
+#             print(f"{i}\n{start} --> {end}\n{text}\n", file=file, flush=True)
 
 
-class WriteJSON(ResultWriter):
+# class WriteTSV(ResultWriter):
+#     """
+#     Write a transcript to a file in TSV (tab-separated values) format containing lines like:
+#     <start time in integer milliseconds>\t<end time in integer milliseconds>\t<transcript text>
+
+#     Using integer milliseconds as start and end times means there's no chance of interference from
+#     an environment setting a language encoding that causes the decimal in a floating point number
+#     to appear as a comma; also is faster and more efficient to parse & store, e.g., in C++.
+#     """
+
+#     extension: str = "tsv"
+
+#     def write_result(self, result: dict, file: TextIO, options: dict):
+#         print("start", "end", "text", sep="\t", file=file)
+#         for segment in result["segments"]:
+#             print(round(1000 * segment["start"]), file=file, end="\t")
+#             print(round(1000 * segment["end"]), file=file, end="\t")
+#             print(segment["text"].strip().replace("\t", " "), file=file, flush=True)
+
+
+# class WriteJSON(ResultWriter):
     extension: str = "json"
 
     def write_result(self, result: dict, file: TextIO, options: dict):
@@ -241,9 +241,9 @@ def get_writer(
     writers = {
         "txt": WriteTXT,
         "vtt": WriteVTT,
-        "srt": WriteSRT,
-        "tsv": WriteTSV,
-        "json": WriteJSON,
+        # "srt": WriteSRT,
+        # "tsv": WriteTSV,
+        # "json": WriteJSON,
     }
 
     if output_format == "all":
